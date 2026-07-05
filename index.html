@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Lab — Project Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14181c;
+    --surface: #1c2227;
+    --surface-2: #232a30;
+    --ink: #ede9e1;
+    --ink-muted: #8b939a;
+    --line: #333c43;
+    --accent: #bd6a2c;
+    --accent-soft: rgba(189, 106, 44, 0.14);
+    --steel: #7f909c;
+    --error: #c25b4a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    padding: 40px 20px 80px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sheet {
+    width: 100%;
+    max-width: 720px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    position: relative;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+
+  /* registration marks — corner crosshairs like a pattern-cutting sheet */
+  .reg {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    z-index: 2;
+  }
+  .reg::before, .reg::after {
+    content: '';
+    position: absolute;
+    background: var(--steel);
+  }
+  .reg::before { width: 16px; height: 1px; top: 7px; left: 0; }
+  .reg::after { width: 1px; height: 16px; left: 7px; top: 0; }
+  .reg.tl { top: -8px; left: -8px; }
+  .reg.tr { top: -8px; right: -8px; }
+  .reg.bl { bottom: -8px; left: -8px; }
+  .reg.br { bottom: -8px; right: -8px; }
+
+  .ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 28px 32px 20px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .brand {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brand span { color: var(--accent); }
+
+  .tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    letter-spacing: 0.03em;
+  }
+
+  .ticket-id {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--steel);
+    line-height: 1.6;
+  }
+  .ticket-id b { color: var(--accent); font-weight: 500; }
+
+  .intro {
+    padding: 24px 32px 8px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    max-width: 56ch;
+  }
+
+  form { padding: 8px 32px 32px; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 32px 0 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .section-label:first-of-type { margin-top: 8px; }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; }
+    .ticket-header { flex-direction: column; gap: 14px; }
+    .ticket-id { text-align: left; }
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+  label .req { color: var(--accent); }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 11px 12px;
+    border-radius: 3px;
+    transition: border-color 0.15s ease;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  textarea { resize: vertical; min-height: 90px; font-family: 'Inter', sans-serif; }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0L5 6L10 0Z' fill='%237f909c'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 32px;
+  }
+
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    position: relative;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    margin: 0;
+  }
+  .chip span {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    background: var(--surface-2);
+    transition: all 0.15s ease;
+  }
+  .chip input:checked + span {
+    border-color: var(--accent);
+    color: var(--ink);
+    background: var(--accent-soft);
+  }
+
+  .hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--steel);
+    margin-top: 6px;
+  }
+
+  button[type="submit"] {
+    margin-top: 28px;
+    width: 100%;
+    background: var(--accent);
+    color: #1a1410;
+    border: none;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+  button[type="submit"]:hover { filter: brightness(1.08); }
+
+  .footnote {
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    margin-top: 14px;
+  }
+
+  .confirm {
+    display: none;
+    padding: 60px 32px;
+    text-align: center;
+  }
+  .confirm.show { display: block; }
+  .confirm .mark {
+    font-family: 'Oswald', sans-serif;
+    font-size: 40px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .confirm p { color: var(--ink-muted); font-size: 14px; line-height: 1.6; }
+  .confirm .id { font-family: 'IBM Plex Mono', monospace; color: var(--steel); font-size: 12px; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <span class="reg tl"></span>
+  <span class="reg tr"></span>
+  <span class="reg bl"></span>
+  <span class="reg br"></span>
+
+  <div class="ticket-header">
+    <div>
+      <div class="brand">SAMPLE <span>LAB</span></div>
+      <div class="tagline">PROJECT BRIEF — FOOTWEAR DESIGN &amp; PRODUCTION</div>
+    </div>
+    <div class="ticket-id">
+      REF <b id="ticketId">SL-2026-000</b><br>
+      STATUS: <span id="ticketStatus">NOT SUBMITTED</span>
+    </div>
+  </div>
+
+  <div class="intro">
+    Tell us the essentials about your project. No made-up numbers, no empty promises —
+    from this brief we'll put together a proposal grounded in the reality of your product.
+  </div>
+
+  <form id="briefForm">
+    <div class="section-label">Contact</div>
+    <div class="row">
+      <div class="field">
+        <label>Name / Brand <span class="req">*</span></label>
+        <input type="text" name="nome" required>
+      </div>
+      <div class="field">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" name="email" required>
+      </div>
+    </div>
+    <div class="field">
+      <label>Phone / WhatsApp (optional)</label>
+      <input type="tel" name="telefone">
+    </div>
+
+    <div class="section-label">The Project</div>
+    <div class="row">
+      <div class="field">
+        <label>Project type</label>
+        <select name="tipo_projeto">
+          <option>New collection</option>
+          <option>Single sample / prototype</option>
+          <option>Bulk production</option>
+          <option>Redesign of an existing model</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Current stage</label>
+        <select name="fase">
+          <option>Just an idea</option>
+          <option>I have sketches or references</option>
+          <option>I already have a tech pack</option>
+          <option>I need to redesign a model</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Footwear type</label>
+      <div class="chip-group">
+        <label class="chip"><input type="checkbox" name="calcado" value="Casual"><span>Casual</span></label>
+        <label class="chip"><input type="checkbox" name="calcado" value="Sneaker"><span>Sneaker</span></label>
+        <label class="chip"><input type="checkbox" name="calcado" value="Boot"><span>Boot</span></label>
+        <label class="chip"><input type="checkbox" name="calcado" value="Heel"><span>Heel</span></label>
+        <label class="chip"><input type="checkbox" name="calcado" value="Sandal"><span>Sandal</span></label>
+        <label class="chip"><input type="checkbox" name="calcado" value="Other"><span>Other</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Materials in mind</label>
+      <div class="chip-group">
+        <label class="chip"><input type="checkbox" name="material" value="Leather"><span>Leather</span></label>
+        <label class="chip"><input type="checkbox" name="material" value="Synthetic/Vegan"><span>Synthetic / Vegan</span></label>
+        <label class="chip"><input type="checkbox" name="material" value="Textile"><span>Textile</span></label>
+        <label class="chip"><input type="checkbox" name="material" value="Sustainable"><span>Sustainable / Recycled</span></label>
+        <label class="chip"><input type="checkbox" name="material" value="Not decided"><span>Not decided yet</span></label>
+      </div>
+    </div>
+
+    <div class="section-label">Scale &amp; Timeline</div>
+    <div class="row">
+      <div class="field">
+        <label>Expected quantity</label>
+        <select name="quantidade">
+          <option>Sample / prototype</option>
+          <option>Small run (up to 500 pairs)</option>
+          <option>Medium run (500–5,000 pairs)</option>
+          <option>Large run (5,000+ pairs)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Market positioning</label>
+        <select name="mercado">
+          <option>Affordable / entry-level</option>
+          <option>Mid-range</option>
+          <option>Premium / luxury</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Desired timeline</label>
+      <input type="text" name="prazo" placeholder="e.g. prototype in 6 weeks, collection ready by March">
+    </div>
+
+    <div class="section-label">Details</div>
+    <div class="field">
+      <label>Tell us more — references, moodboard links, technical constraints, anything relevant</label>
+      <textarea name="detalhes" placeholder="Write freely here..."></textarea>
+      <div class="hint">THE MORE REAL CONTEXT, THE MORE ACCURATE THE PROPOSAL</div>
+    </div>
+
+    <button type="submit">Submit project brief</button>
+    <div class="footnote">We reply within 2 business days</div>
+  </form>
+
+  <div class="confirm" id="confirmBlock">
+    <div class="mark">✓</div>
+    <p>Brief received. Our team will review the details<br>and reach out about next steps.</p>
+    <div class="id">REF <span id="confirmId"></span></div>
+  </div>
+</div>
+
+<script>
+  const ticketNum = String(Math.floor(1 + Math.random() * 998)).padStart(3, '0');
+  const ticketId = 'SL-2026-' + ticketNum;
+  document.getElementById('ticketId').textContent = ticketId;
+
+  const form = document.getElementById('briefForm');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const formData = new FormData(form);
+    formData.append('reference', ticketId);
+
+    fetch('https://formspree.io/f/xkolyzow', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    })
+    .then(function(response) {
+      if (response.ok) {
+        document.getElementById('ticketStatus').textContent = 'SUBMITTED';
+        document.getElementById('confirmId').textContent = ticketId;
+        form.style.display = 'none';
+        document.getElementById('confirmBlock').classList.add('show');
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit project brief';
+        alert('Something went wrong sending the brief. Please try again or email us directly.');
+      }
+    })
+    .catch(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit project brief';
+      alert('Something went wrong sending the brief. Please try again or email us directly.');
+    });
+  });
+</script>
+
+</body>
+</html>
